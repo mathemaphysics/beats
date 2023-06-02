@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  devcontainer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        DEVUSER: devuser
+    user: devuser
+    environment:
+    command: "sleep infinity"
+    volumes:
+      - ..:/workspaces/beats
+      - //var/run/docker.sock:/var/run/docker.sock
