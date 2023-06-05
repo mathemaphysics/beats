@@ -27,7 +27,7 @@ import (
 
 	"github.com/elastic/go-concert/ctxtool"
 
-	loginp "github.com/elastic/beats/v7/filebeat/input/filestream/internal/input-logfile"
+	loginp "github.com/elastic/beats/v7/filebeat/input/compressed/internal/input-logfile"
 	input "github.com/elastic/beats/v7/filebeat/input/v2"
 	"github.com/elastic/beats/v7/libbeat/common/cleanup"
 	"github.com/elastic/beats/v7/libbeat/common/file"
