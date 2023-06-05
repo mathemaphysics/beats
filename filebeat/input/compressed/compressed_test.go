@@ -110,7 +110,7 @@ func TestLogFileTruncated(t *testing.T) {
 }
 
 func createTestLogFile() *os.File {
-	f, err := ioutil.TempFile("", "filestream_reader_test")
+	f, err := ioutil.TempFile("", "compressed_reader_test")
 	if err != nil {
 		panic(err)
 	}

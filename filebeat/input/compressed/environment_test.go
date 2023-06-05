@@ -316,7 +316,7 @@ func (e *inputTestingEnvironment) getRegistryState(key string) (registryEntry, e
 func getIDFromPath(filepath, inputID string, fi os.FileInfo) string {
 	identifier, _ := newINodeDeviceIdentifier(nil)
 	src := identifier.GetSource(loginp.FSEvent{Info: fi, Op: loginp.OpCreate, NewPath: filepath})
-	return "filestream::" + inputID + "::" + src.Name()
+	return "compressed::" + inputID + "::" + src.Name()
 }
 
 // waitUntilEventCount waits until total count events arrive to the client.

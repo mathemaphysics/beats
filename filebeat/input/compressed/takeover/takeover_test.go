@@ -40,27 +40,27 @@ inputs:
   - type: log
     paths:
       - "/path/log*.log"
-  - type: filestream
-    id: filestream-id-1
+  - type:
+    id: compressed-id-1
     enabled: true
     paths:
-      - "/path/filestream1-*.log"
+      - "/path/compressed1-*.log"
 `)
 	require.NoError(t, err)
 
 	takeOver, err := conf.NewConfigFrom(`
 inputs:
-  - type: filestream
-    id: filestream-id-1
+  - type: compressed
+    id: compressed-id-1
     enabled: true
     paths:
-      - "/path/filestream1-*.log"
-  - type: filestream
-    id: filestream-id-2
+      - "/path/compressed1-*.log"
+  - type: compressed
+    id: compressed-id-2
     take_over: true
     enabled: true
     paths:
-      - "/path/filestream2-*.log"
+      - "/path/compressed2-*.log"
       - "/path/log*.log" # taking over from the log input
 
 `)
@@ -68,33 +68,33 @@ inputs:
 
 	noUniqueID, err := conf.NewConfigFrom(`
 inputs:
-  - type: filestream
-    id: filestream-id-2
+  - type: compressed
+    id: compressed-id-2
     take_over: true
     enabled: true
     paths:
-      - "/path/filestream2-*.log"
-  - type: filestream
-    id: filestream-id-2 # not unique
+      - "/path/compressed2-*.log"
+  - type: compressed
+    id: compressed-id-2 # not unique
     take_over: true
     enabled: true
     paths:
-      - "/path/filestream3-*.log"
-  - type: filestream
+      - "/path/compressed3-*.log"
+  - type: compressed
     take_over: true # no ID
     enabled: true
     paths:
-      - "/path/filestream-*.log"
+      - "/path/compressed-*.log"
 `)
 	require.NoError(t, err)
 
 	states := []state{
-		// this state is to make sure the filestreams without `take_over` remain untouched
+		// this state is to make sure the compresseds without `take_over` remain untouched
 		{
-			key: "filestream::filestream-id-1::native::11111111-22222222",
+			key: "compressed::compressed-id-1::native::11111111-22222222",
 			value: mapstr.M{
 				"meta": mapstr.M{
-					"source":          "/path/filestream1-1.log",
+					"source":          "/path/compressed1-1.log",
 					"identifier_name": "native",
 				},
 				"ttl":     1800000000000,
@@ -140,7 +140,7 @@ inputs:
 			},
 		},
 		{
-			// this is to make sure that a state that does not match a filestream path
+			// this is to make sure that a state that does not match a compressed path
 			// remains untouched
 			key: "filebeat::logs::native::33333333-44444444",
 			value: mapstr.M{
@@ -175,18 +175,18 @@ inputs:
 			states: states,
 		},
 		{
-			name:   "does nothing when there is no filestream with `take_over`",
+			name:   "does nothing when there is no compressed with `take_over`",
 			cfg:    noTakeOver,
 			states: states,
 		},
 		{
-			name:   "returns error if filestreams don't have unique IDs",
+			name:   "returns error if compresseds don't have unique IDs",
 			cfg:    noUniqueID,
 			states: states,
-			expErr: "failed to read input configuration: filestream with ID `filestream-id-2` in `take over` mode requires a unique ID. Add the `id:` key with a unique value",
+			expErr: "failed to read input configuration: compressed with ID `compressed-id-2` in `take over` mode requires a unique ID. Add the `id:` key with a unique value",
 		},
 		{
-			name:       "filestream takes over when there is `take_over: true`",
+			name:       "compressed takes over when there is `take_over: true`",
 			cfg:        takeOver,
 			states:     states,
 			mustBackup: true,
@@ -196,7 +196,7 @@ inputs:
 			},
 			mustSet: []setOp{
 				{
-					key: "filestream::filestream-id-2::native::92938222-16777232",
+					key: "compressed::compressed-id-2::native::92938222-16777232",
 					value: mapstr.M{
 						"meta": mapstr.M{
 							"source":          "/path/log1.log",
@@ -210,7 +210,7 @@ inputs:
 					},
 				},
 				{
-					key: "filestream::filestream-id-2::native::92938223-16777233",
+					key: "compressed::compressed-id-2::native::92938223-16777233",
 					value: mapstr.M{
 						"meta": mapstr.M{
 							"source":          "/path/log2.log",

@@ -42,7 +42,7 @@ import (
 	"github.com/elastic/elastic-agent-libs/logp"
 )
 
-const pluginName = "filestream"
+const pluginName = "compressed"
 
 type state struct {
 	Offset int64 `json:"offset" struct:"offset"`
@@ -53,9 +53,9 @@ type fileMeta struct {
 	IdentifierName string `json:"identifier_name" struct:"identifier_name"`
 }
 
-// filestream is the input for reading from files which
+// compressed is the input for reading from files which
 // are actively written by other applications.
-type filestream struct {
+type compressed struct {
 	readerConfig    readerConfig
 	encodingFactory encoding.EncodingFactory
 	encoding        encoding.Encoding
@@ -63,14 +63,14 @@ type filestream struct {
 	parsers         parser.Config
 }
 
-// Plugin creates a new filestream input plugin for creating a stateful input.
+// Plugin creates a new compressed input plugin for creating a stateful input.
 func Plugin(log *logp.Logger, store loginp.StateStore) input.Plugin {
 	return input.Plugin{
 		Name:       pluginName,
 		Stability:  feature.Stable,
 		Deprecated: false,
-		Info:       "filestream input",
-		Doc:        "The filestream input collects logs from the local filestream service",
+		Info:       "compressed input (compressed with compressed allowed)",
+		Doc:        "The compressed input collects logs from the local potentially compressed compressed service",
 		Manager: &loginp.InputManager{
 			Logger:     log,
 			StateStore: store,
@@ -96,19 +96,19 @@ func configure(cfg *conf.C) (loginp.Prospector, loginp.Harvester, error) {
 		return nil, nil, fmt.Errorf("unknown encoding('%v')", config.Reader.Encoding)
 	}
 
-	filestream := &filestream{
+	compressed := &compressed{
 		readerConfig:    config.Reader,
 		encodingFactory: encodingFactory,
 		closerConfig:    config.Close,
 		parsers:         config.Reader.Parsers,
 	}
 
-	return prospector, filestream, nil
+	return prospector, compressed, nil
 }
 
-func (inp *filestream) Name() string { return pluginName }
+func (inp *compressed) Name() string { return pluginName }
 
-func (inp *filestream) Test(src loginp.Source, ctx input.TestContext) error {
+func (inp *compressed) Test(src loginp.Source, ctx input.TestContext) error {
 	fs, ok := src.(fileSource)
 	if !ok {
 		return fmt.Errorf("not file source")
@@ -121,7 +121,7 @@ func (inp *filestream) Test(src loginp.Source, ctx input.TestContext) error {
 	return reader.Close()
 }
 
-func (inp *filestream) Run(
+func (inp *compressed) Run(
 	ctx input.Context,
 	src loginp.Source,
 	cursor loginp.Cursor,
@@ -142,10 +142,10 @@ func (inp *filestream) Run(
 	}
 
 	_, streamCancel := ctxtool.WithFunc(ctx.Cancelation, func() {
-		log.Debug("Closing reader of filestream")
+		log.Debug("Closing reader of compressed")
 		err := r.Close()
 		if err != nil {
-			log.Errorf("Error stopping filestream reader %v", err)
+			log.Errorf("Error stopping compressed reader %v", err)
 		}
 	})
 	defer streamCancel()
@@ -167,7 +167,7 @@ func initState(log *logp.Logger, c loginp.Cursor, s fileSource) state {
 	return state
 }
 
-func (inp *filestream) open(log *logp.Logger, canceler input.Canceler, fs fileSource, offset int64) (reader.Reader, error) {
+func (inp *compressed) open(log *logp.Logger, canceler input.Canceler, fs fileSource, offset int64) (reader.Reader, error) {
 	f, err := inp.openFile(log, fs.newPath, offset)
 	if err != nil {
 		return nil, err
@@ -234,7 +234,7 @@ func (inp *filestream) open(log *logp.Logger, canceler input.Canceler, fs fileSo
 // or the file cannot be opened because for example of failing read permissions, an error
 // is returned and the harvester is closed. The file will be picked up again the next time
 // the file system is scanned
-func (inp *filestream) openFile(log *logp.Logger, path string, offset int64) (*os.File, error) {
+func (inp *compressed) openFile(log *logp.Logger, path string, offset int64) (*os.File, error) {
 	fi, err := os.Stat(path)
 	if err != nil {
 		return nil, fmt.Errorf("failed to stat source file %s: %w", path, err)
@@ -293,7 +293,7 @@ func checkFileBeforeOpening(fi os.FileInfo) error {
 	return nil
 }
 
-func (inp *filestream) initFileOffset(file *os.File, offset int64) error {
+func (inp *compressed) initFileOffset(file *os.File, offset int64) error {
 	if offset > 0 {
 		_, err := file.Seek(offset, io.SeekCurrent)
 		return err
@@ -304,7 +304,7 @@ func (inp *filestream) initFileOffset(file *os.File, offset int64) error {
 	return err
 }
 
-func (inp *filestream) readFromSource(
+func (inp *compressed) readFromSource(
 	ctx input.Context,
 	log *logp.Logger,
 	r reader.Reader,
@@ -342,7 +342,7 @@ func (inp *filestream) readFromSource(
 
 // isDroppedLine decides if the line is exported or not based on
 // the include_lines and exclude_lines options.
-func (inp *filestream) isDroppedLine(log *logp.Logger, line string) bool {
+func (inp *compressed) isDroppedLine(log *logp.Logger, line string) bool {
 	if len(inp.readerConfig.IncludeLines) > 0 {
 		if !matchAny(inp.readerConfig.IncludeLines, line) {
 			log.Debug("Drop line as it does not match any of the include patterns %s", line)

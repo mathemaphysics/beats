@@ -234,7 +234,7 @@ func TestFilestreamEmptyLine(t *testing.T) {
 }
 
 // test_empty_lines_only from test_harvester.py
-// This test differs from the original because in filestream
+// This test differs from the original because in compressed
 // input offset is no longer persisted when the line is empty.
 func TestFilestreamEmptyLinesOnly(t *testing.T) {
 	env := newInputTestingEnvironment(t)

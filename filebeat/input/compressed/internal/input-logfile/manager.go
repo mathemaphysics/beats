@@ -173,13 +173,13 @@ func (cim *InputManager) Create(config *conf.C) (v2.Input, error) {
 	}
 
 	if settings.ID == "" {
-		cim.Logger.Error("filestream input ID without ID might lead to data" +
+		cim.Logger.Error("compressed input ID without ID might lead to data" +
 			" duplication, please add an ID and restart Filebeat")
 	}
 
 	cim.idsMux.Lock()
 	if _, exists := cim.ids[settings.ID]; exists {
-		cim.Logger.Errorf("filestream input with ID '%s' already exists, this "+
+		cim.Logger.Errorf("compressed input with ID '%s' already exists, this "+
 			"will lead to data duplication, please use a different ID", settings.ID)
 	}
 

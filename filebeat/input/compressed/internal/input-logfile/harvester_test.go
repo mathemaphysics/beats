@@ -395,7 +395,7 @@ func testDefaultHarvesterGroup(t *testing.T, mockHarvester Harvester) *defaultHa
 		pipeline:   &pipelinemock.MockPipelineConnector{},
 		harvester:  mockHarvester,
 		store:      testOpenStore(t, "test", nil),
-		identifier: &sourceIdentifier{"filestream::.global::"},
+		identifier: &sourceIdentifier{"compressed::.global::"},
 		tg:         task.NewGroup(0, time.Second, logp.L(), ""),
 	}
 }

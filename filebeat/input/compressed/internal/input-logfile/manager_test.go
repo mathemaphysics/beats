@@ -194,7 +194,7 @@ func TestInputManager_Create(t *testing.T) {
 			require.NoError(t, err)
 
 			assert.NotContains(t, buff.String(),
-				"filestream input with ID")
+				"compressed input with ID")
 			assert.NotContains(t, buff.String(),
 				"already exists")
 		})
