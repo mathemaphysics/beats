@@ -63,7 +63,8 @@
 	"remoteUser": "devuser",
 
 	"remoteEnv": {
-		"DISPLAY": "host.docker.internal:0.0" // Point to host machine's Xorg
+		"DISPLAY": "host.docker.internal:0.0", // Point to host machine's Xorg
+        "GOROOT": "/workspaces/beats"
 	},
 
 	// Maps the .ssh/ folder from your ${HOME} into /home/devuser/.ssh
