@@ -19,6 +19,7 @@ package inputs
 
 import (
 	"github.com/elastic/beats/v7/filebeat/beater"
+	"github.com/elastic/beats/v7/filebeat/input/compressed"
 	"github.com/elastic/beats/v7/filebeat/input/filestream"
 	"github.com/elastic/beats/v7/filebeat/input/kafka"
 	"github.com/elastic/beats/v7/filebeat/input/tcp"
@@ -38,6 +39,7 @@ func Init(info beat.Info, log *logp.Logger, components beater.StateStore) []v2.P
 
 func genericInputs(log *logp.Logger, components beater.StateStore) []v2.Plugin {
 	return []v2.Plugin{
+		compressed.Plugin(log, components),
 		filestream.Plugin(log, components),
 		kafka.Plugin(),
 		tcp.Plugin(),

@@ -11,47 +11,41 @@
 	},
 	"runArgs": [],
 
-	// Set *default* container specific settings.json values on container create.
-	"settings": {},
+    // Add the IDs of extensions you want installed when the container is created.
+    "customizations": {
+        "vscode": {
+            // Set *default* container specific settings.json values on container create.
+            "settings": {
+            },
 
-	// Add the IDs of extensions you want installed when the container is created.
-	"extensions": [
-		"ms-vscode.cpptools",
-		"jeff-hykin.better-cpp-syntax",
-		"ms-vscode.cpptools-themes",
-		"ms-vscode-remote.remote-containers",
-		"ms-vscode-remote.remote-ssh",
-		"tibotix.definition-autocompletion",
-		"ms-vscode.cmake-tools",
-		"twxs.cmake",
-		"ms-vscode.cpptools-extension-pack",
-		"danielpinto8zz6.c-cpp-project-generator",
-		"novaturion.cpp-classes-creator",
-		"donjayamanne.githistory",
-		"felipecaputo.git-project-manager",
-		"eamodio.gitlens",
-		"austin.code-gnu-global",
-		"mhutchie.git-graph",
-		"huizhou.githd",
-		"github.codespaces",
-		"gitpod.gitpod-desktop",
-		"gitpod.gitpod-remote-ssh",
-		"github.vscode-pull-request-github",
-		"ms-vsliveshare.vsliveshare",
-		"ms-vsliveshare.vsliveshare-audio",
-		"ms-azuretools.vscode-docker",
-		"isaias.doxygen-pack",
-		"gaborv.flatbuffers",
-		"hbenl.vscode-test-explorer",
-		"novaturion.cpp-classes-creator",
-		"matepek.vscode-catch2-test-adapter",
-		"Gruntfuggly.todo-tree",
-		"wayou.vscode-todo-highlight",
-		"golang.Go",
-		"aldijav.golangwithdidi",
-		"golang.go",
-		"EditorConfig.EditorConfig"
-	],
+            // All extensions you need
+            "extensions": [
+                "ms-vscode-remote.remote-containers",
+                "ms-vscode-remote.remote-ssh",
+                "tibotix.definition-autocompletion",
+                "donjayamanne.githistory",
+                "felipecaputo.git-project-manager",
+                "eamodio.gitlens",
+                "austin.code-gnu-global",
+                "mhutchie.git-graph",
+                "huizhou.githd",
+                "github.codespaces",
+                "gitpod.gitpod-desktop",
+                "gitpod.gitpod-remote-ssh",
+                "github.vscode-pull-request-github",
+                "ms-vsliveshare.vsliveshare",
+                "ms-vsliveshare.vsliveshare-audio",
+                "ms-azuretools.vscode-docker",
+                "hbenl.vscode-test-explorer",
+                "Gruntfuggly.todo-tree",
+                "wayou.vscode-todo-highlight",
+                "golang.Go",
+                "aldijav.golangwithdidi",
+                "golang.go",
+                "EditorConfig.EditorConfig"
+            ]
+        }
+    },
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
